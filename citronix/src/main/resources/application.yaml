@@ -1,0 +1,16 @@
+server:
+  port: 8085
+
+spring:
+  jackson:
+    default-property-inclusion: NON_NULL
+  profiles:
+    active: prod
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml

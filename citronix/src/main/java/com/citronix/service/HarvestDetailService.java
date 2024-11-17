@@ -1,0 +1,15 @@
+package com.citronix.service;
+
+import org.springframework.stereotype.Service;
+
+import lombok.extern.log4j.Log4j2;
+
+/**
+ * Service interface for HarvestDetail entity.
+ * Defines methods for CRUD operations and additional business logic.
+ */
+@Service
+@Log4j2
+public class HarvestDetailService {
+
+}
