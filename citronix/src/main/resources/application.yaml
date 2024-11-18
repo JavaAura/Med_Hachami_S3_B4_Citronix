@@ -1,16 +1,17 @@
 server:
   port: 8085
-
 spring:
-  jackson:
-    default-property-inclusion: NON_NULL
+  application:
+    name: citronix
   profiles:
     active: prod
-
   jpa:
     hibernate:
-      ddl-auto: none
-    show-sql: false
-
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   liquibase:
+    enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml

@@ -3,3 +3,6 @@ databaseChangeLog:
   - include:
       file: changes/changelog-1.yaml
       relativeToChangelogFile: true
+  # - include:
+  #     file: changes/changelog-2.yaml
+  #     relativeToChangelogFile: true
