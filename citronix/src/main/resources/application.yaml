@@ -5,13 +5,45 @@ spring:
     name: citronix
   profiles:
     active: prod
+  # JPA Configuration
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
-    show-sql: true
     properties:
       hibernate:
         format_sql: true
+
+  # Pagination Configuration
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 100
+
+  #liquibase Configuration
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
+
+
+  # Swagger Configuration
+  springfox:
+    documentation:
+      swagger-ui:
+        path: /swagger-ui.html
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.formations: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+
+

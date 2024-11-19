@@ -1,5 +1,6 @@
 package com.citronix.service;
 
+import com.citronix.dao.FarmDao;
 import com.citronix.dto.req.FarmDTO;
 import com.citronix.exception.business.DatabaseOperationException;
 import com.citronix.exception.business.ResourceNotFoundException;
@@ -7,6 +8,7 @@ import com.citronix.mapper.FarmMapperDTO;
 import com.citronix.model.Farm;
 import com.citronix.repository.FarmRepository;
 import com.citronix.service.interfaces.IFarmService;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,13 @@ import java.util.stream.Collectors;
 public class FarmService implements IFarmService {
     private static final Logger log = LogManager.getLogger(FarmService.class);
     private final FarmRepository farmRepository;
+    private final FarmDao farmDao;
 
 
     @Autowired
-    public FarmService(FarmRepository farmRepository){
+    public FarmService(FarmRepository farmRepository,FarmDao farmDao){
         this.farmRepository = farmRepository;
+        this.farmDao = farmDao;
     }
 
 
@@ -45,12 +49,22 @@ public class FarmService implements IFarmService {
         }
     }
 
+
+
     @Override
-    public List<FarmDTO> allFarms() {
-        List<Farm> farms = farmRepository.findAll();
-        if(farms.isEmpty()){
-            throw new ResourceNotFoundException("No farms found");
-        }
-        return farms.stream().map(f->FarmMapperDTO.INSTANCE.toDTO(f)).collect(Collectors.toList());
+    public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress) {
+        return farmDao.findFarmByNameAndAddress(farmName, farmAddress);
+    }
+
+    @Transactional
+    @Override
+    public FarmDTO updateFarm(FarmDTO farmDTO) {
+        Farm farm = farmRepository.findById(farmDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Farm not found"));
+
+        Farm updatedFarm = farmRepository.save(FarmMapperDTO.INSTANCE.toEntity(farmDTO));
+
+        // Return the updated farm as a DTO
+        return FarmMapperDTO.INSTANCE.toDTO(updatedFarm);
     }
 }
