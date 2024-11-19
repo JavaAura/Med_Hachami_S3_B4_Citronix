@@ -64,7 +64,23 @@ public class FarmService implements IFarmService {
 
         Farm updatedFarm = farmRepository.save(FarmMapperDTO.INSTANCE.toEntity(farmDTO));
 
-        // Return the updated farm as a DTO
         return FarmMapperDTO.INSTANCE.toDTO(updatedFarm);
     }
+
+    public FarmDTO getFarmById(Long id) {
+        Farm farm = farmRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Farm not found"));
+
+        return FarmMapperDTO.INSTANCE.toDTO(farm);
+    }
+
+    public void deleteFarmById(Long id) {
+        if (!farmRepository.existsById(id)) {
+            throw new IllegalArgumentException("Farm not found");
+        }
+
+        farmRepository.deleteById(id);
+    }
+
+
 }

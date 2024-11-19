@@ -109,6 +109,33 @@ public class FarmController {
         return ResponseEntity.ok(updatedFarmDTO);
     }
 
+    @Operation(summary = "Get farm details by ID", description = "Fetch farm details (name, address) by farm ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Farm details fetched successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid farm ID"),
+            @ApiResponse(responseCode = "404", description = "Farm not found")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<FarmDTO> getFarmById(@PathVariable Long id) {
+        FarmDTO farmDTO = farmService.getFarmById(id);
+
+        return ResponseEntity.ok(farmDTO);
+    }
+
+
+    @Operation(summary = "Delete a farm by ID", description = "Delete a farm using its unique ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Farm deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid farm ID"),
+            @ApiResponse(responseCode = "404", description = "Farm not found")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteFarmById(@PathVariable Long id) {
+        farmService.deleteFarmById(id);
+
+        // Return success message
+        return ResponseEntity.ok("Farm deleted successfully");
+    }
 
 
 

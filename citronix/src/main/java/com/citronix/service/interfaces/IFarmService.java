@@ -9,4 +9,7 @@ public interface IFarmService {
     Farm saveFarm(FarmDTO farmDTO);
     public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress) ;
     public FarmDTO updateFarm(FarmDTO farmDTO) ;
+    public FarmDTO getFarmById(Long id) ;
+    public void deleteFarmById(Long id);
+
 }
