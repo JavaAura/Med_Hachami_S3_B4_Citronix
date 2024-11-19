@@ -1,6 +1,7 @@
 package com.citronix.model;
 
-import javax.persistence.Table;
+import jakarta.persistence.*;
+
 
 import com.citronix.model.entity.BaseEntity;
 
@@ -8,6 +9,7 @@ import com.citronix.model.entity.BaseEntity;
  * Represents a Harvest entity in the application.
  */
 @Table(name = "harvests")
+@Entity
 public class Harvest extends BaseEntity {
 
 }
