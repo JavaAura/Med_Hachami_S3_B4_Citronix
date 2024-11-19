@@ -5,11 +5,13 @@ import com.citronix.mapper.FarmMapperDTO;
 import com.citronix.model.Farm;
 import com.citronix.service.FarmService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,6 +56,43 @@ public class FarmController {
         Farm savedFarm = farmService.saveFarm(farmDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(FarmMapperDTO.INSTANCE.toDTO(savedFarm));
     }
+
+
+    @GetMapping("/search")
+    @Operation(
+            summary = "Search farms by name and address",
+            description = "Search for farms by their name and address. If either parameter is empty, all farms will be returned.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully retrieved the list of farms",
+                            content = @io.swagger.v3.oas.annotations.media.Content(
+                                    mediaType = "application/json",
+                                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = FarmDTO.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Bad Request - Invalid parameters",
+                            content = @io.swagger.v3.oas.annotations.media.Content(
+                                    mediaType = "application/json"
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<List<FarmDTO>> findFarmByNameAndAddress(
+            @Parameter(description = "Name of the farm to search for", required = true)
+            @RequestParam String farmName,
+
+            @Parameter(description = "Address of the farm to search for", required = true)
+            @RequestParam @NotEmpty String farmAddress) {
+
+        List<FarmDTO> farmDTOs = farmService.findFarmByNameAndAddress(farmName, farmAddress);
+
+        return ResponseEntity.ok(farmDTOs);
+    }
+
+    
 
 
 

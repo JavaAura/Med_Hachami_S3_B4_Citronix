@@ -1,5 +1,6 @@
 package com.citronix.service;
 
+import com.citronix.dao.FarmDao;
 import com.citronix.dto.req.FarmDTO;
 import com.citronix.exception.business.DatabaseOperationException;
 import com.citronix.exception.business.ResourceNotFoundException;
@@ -25,11 +26,13 @@ import java.util.stream.Collectors;
 public class FarmService implements IFarmService {
     private static final Logger log = LogManager.getLogger(FarmService.class);
     private final FarmRepository farmRepository;
+    private final FarmDao farmDao;
 
 
     @Autowired
-    public FarmService(FarmRepository farmRepository){
+    public FarmService(FarmRepository farmRepository,FarmDao farmDao){
         this.farmRepository = farmRepository;
+        this.farmDao = farmDao;
     }
 
 
@@ -52,5 +55,10 @@ public class FarmService implements IFarmService {
             throw new ResourceNotFoundException("No farms found");
         }
         return farms.stream().map(f->FarmMapperDTO.INSTANCE.toDTO(f)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress) {
+        return farmDao.findFarmByNameAndAddress(farmName, farmAddress);
     }
 }
