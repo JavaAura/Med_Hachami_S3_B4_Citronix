@@ -2,6 +2,7 @@ package com.citronix.exception.business;
 
 
 import com.citronix.dto.res.ErrorResponse;
+import com.citronix.dto.res.ValidationResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger( com.citronix.exception.business.GlobalExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
@@ -87,21 +88,27 @@ public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        List<ValidationResponse> errors = new ArrayList<>();
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String object = error.getObjectName();
-            String fieldName = ((FieldError) error).getField();
-            Object rejectedValue = ((FieldError) error).getRejectedValue();
-            String message = error.getDefaultMessage();
-            errors.add(new ValidationResponse(object, fieldName, rejectedValue, message));
-        });
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
 
-        ErrorResponse errorRes = new ErrorResponse("400", HttpStatus.BAD_REQUEST, "BAD REQUEST");
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", "400");
+        response.put("status", "400 BAD_REQUEST");
 
-        errorRes.setParameters(errors.stream().map(ValidationResponse::getMessage).collect(Collectors.toList()));
+        // Collect validation errors
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        response.put("errors", errors);
 
-        return new ResponseEntity<>(errorRes, HttpStatus.BAD_REQUEST);
+        // Add a timestamp (optional)
+        response.put("timestamp", java.time.LocalDateTime.now().toString());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({Exception.class})
@@ -159,4 +166,3 @@ public class GlobalExceptionHandler  extends ResponseEntityExceptionHandler {
 
 
 }
-
