@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface IFarmService {
     Farm saveFarm(FarmDTO farmDTO);
-    List<FarmDTO> allFarms();
     public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress) ;
-
+    public FarmDTO updateFarm(FarmDTO farmDTO) ;
 }

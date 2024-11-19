@@ -94,6 +94,23 @@ public class FarmController {
 
 
 
+    @Operation(summary = "Update farm details", description = "Update the details of a farm (name and address) using the farm ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Farm details updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid farm ID"),
+            @ApiResponse(responseCode = "404", description = "Farm not found")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<FarmDTO> updateFarm(@PathVariable Long id,
+                                              @RequestBody FarmDTO farmDTO) {
+
+        FarmDTO updatedFarmDTO = farmService.updateFarm(farmDTO);
+
+        return ResponseEntity.ok(updatedFarmDTO);
+    }
+
+
+
 
 
 
