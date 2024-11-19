@@ -1,6 +1,6 @@
 package com.citronix.model;
 
-import javax.persistence.Table;
+import jakarta.persistence.*;
 
 import com.citronix.model.entity.BaseEntity;
 
@@ -8,6 +8,7 @@ import com.citronix.model.entity.BaseEntity;
  * Represents a Sale entity in the application.
  */
 @Table(name = "sales")
+@Entity
 public class Sale extends BaseEntity {
 
 }

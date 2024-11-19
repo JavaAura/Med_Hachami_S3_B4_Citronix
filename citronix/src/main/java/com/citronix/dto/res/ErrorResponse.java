@@ -21,19 +21,15 @@ public class ErrorResponse {
     @Schema(description = "Error details")
     private String message;
 
-
     @Schema()
     private List<String> parameters = new ArrayList<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime horodatage;
 
-
     public ErrorResponse() {
         horodatage = LocalDateTime.now();
     }
-
-
 
     public ErrorResponse(String code, HttpStatus status, String message) {
         this();
@@ -42,5 +38,23 @@ public class ErrorResponse {
         this.message = message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
+    public void setParameters(List<String> parameters) {
+        this.parameters = parameters;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }
