@@ -6,7 +6,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-19T19:07:06+0000",
+    date = "2024-11-20T16:31:52+0000",
     comments = "version: 1.6.2, compiler: javac, environment: Java 18.0.2-ea (Private Build)"
 )
 public class FarmMapperDTOImpl implements FarmMapperDTO {
