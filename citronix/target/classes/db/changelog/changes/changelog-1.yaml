@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: Nemo
+      preConditions:
+       - onFail: MARK_RAN
+       - not:
+         - tableExists:
+            tableName: farms
+

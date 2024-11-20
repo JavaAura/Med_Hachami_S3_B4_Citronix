@@ -24,7 +24,7 @@ public class FarmDTO {
     @Size(max = 200, message = "Address must not exceed 200 characters")
     private String address;
 
-    @Min( message = "Surface must be greater than 0" , value = 0)
+    @DecimalMin(value = "0.1", message = "Area must be greater than 0")
     @NotNull(message = "Surface is required")
     private double surface;
 
