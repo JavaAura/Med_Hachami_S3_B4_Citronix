@@ -53,8 +53,8 @@ public class FarmService implements IFarmService {
 
 
     @Override
-    public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress) {
-        return farmDao.findFarmByNameAndAddress(farmName, farmAddress);
+    public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress , int page, int size) {
+        return farmDao.findFarmByNameAndAddress(farmName, farmAddress , page ,size);
     }
 
     @Transactional

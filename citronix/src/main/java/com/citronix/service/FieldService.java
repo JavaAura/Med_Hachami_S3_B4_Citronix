@@ -104,7 +104,7 @@ public class FieldService implements IFieldService {
         existingField.setFieldArea(fieldDTO.getArea());
         existingField.setFieldName(fieldDTO.getName());
 
-      
+
         Field updatedField = fieldRepository.save(existingField);
 
         return FieldMapperDTO.INSTANCE.toDTO(updatedField);
