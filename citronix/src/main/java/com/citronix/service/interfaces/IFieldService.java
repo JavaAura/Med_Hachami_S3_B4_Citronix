@@ -10,6 +10,11 @@ import java.util.List;
 
 public interface IFieldService {
     FieldDisplayDTO saveField(FieldDTO fieldDTO);
+    List<FieldDisplayDTO> findFieldsByFarmId(Long farmId) ;
+    FieldDisplayDTO getFieldById(Long fieldId);
+    List<FieldDisplayDTO> findAllFields();
+    void deleteFieldById(Long id);
+    FieldDisplayDTO updateField(Long fieldId, FieldDTO fieldDTO);
 
 
 }

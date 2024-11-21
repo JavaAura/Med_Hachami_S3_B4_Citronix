@@ -21,7 +21,7 @@ public class FarmDao {
     @PersistenceContext
     private EntityManager em;
 
-    public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress) {
+    public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress, int page, int size) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Farm> cq = cb.createQuery(Farm.class);
 
@@ -40,9 +40,14 @@ public class FarmDao {
 
         cq.where(cb.and(namePredicate, addressPredicate));
 
+        // Apply pagination
         TypedQuery<Farm> query = em.createQuery(cq);
+        query.setFirstResult(page * size); // Start position of the first result
+        query.setMaxResults(size);        // Maximum number of results to fetch
+
         List<Farm> farms = query.getResultList();
 
         return farms.stream().map(f -> FarmMapperDTO.INSTANCE.toDTO(f)).collect(Collectors.toList());
     }
+
 }

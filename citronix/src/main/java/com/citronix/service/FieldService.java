@@ -2,6 +2,7 @@ package com.citronix.service;
 
 import com.citronix.dto.req.FieldDTO;
 import com.citronix.dto.res.FieldDisplayDTO;
+import com.citronix.exception.business.FieldConstraintViolationException;
 import com.citronix.mapper.FieldMapperDTO;
 import com.citronix.model.Farm;
 import com.citronix.model.Field;
@@ -14,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service interface for Field entity.
@@ -35,6 +39,17 @@ public class FieldService implements IFieldService {
     public FieldDisplayDTO saveField(FieldDTO fieldDTO) {
         Farm farm = farmRepository.findById(fieldDTO.getFarmId())
                 .orElseThrow(() -> new RuntimeException("Farm not found"));
+
+        validateFieldConstraints(fieldDTO, farm);
+        Double totalFieldArea = fieldRepository.sumFieldAreasByFarmId(farm.getId());
+        totalFieldArea = totalFieldArea != null ? totalFieldArea + fieldDTO.getArea() : fieldDTO.getArea();
+
+        if (totalFieldArea >= farm.getFarmSurface()) {
+            throw new IllegalArgumentException(
+                    "The total area of fields cannot exceed the farm's surface area."
+            );
+        }
+
         Field field = new Field();
         field.setFieldName(fieldDTO.getName());
         field.setFieldArea(fieldDTO.getArea());
@@ -43,5 +58,68 @@ public class FieldService implements IFieldService {
         Field savedField = fieldRepository.save(field);
 
         return FieldMapperDTO.INSTANCE.toDTO(savedField);
+    }
+
+    public List<FieldDisplayDTO> findFieldsByFarmId(Long farmId) {
+        List<Field> fields = fieldRepository.findByFarmId(farmId);
+        return fields.stream()
+                .map(FieldMapperDTO.INSTANCE::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public FieldDisplayDTO getFieldById(Long fieldId) {
+        Field field = fieldRepository.findById(fieldId)
+                .orElseThrow(() -> new IllegalArgumentException("Field not found"));
+
+        return FieldMapperDTO.INSTANCE.toDTO(field);
+
+    }
+
+    @Override
+    public List<FieldDisplayDTO> findAllFields() {
+        List<Field> fields = fieldRepository.findAll(); // Assuming JPA is used
+        return fields.stream()
+                .map(f->FieldMapperDTO.INSTANCE.toDTO(f))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteFieldById(Long id) {
+        if (!fieldRepository.existsById(id)) {
+            throw new IllegalArgumentException("Field not found");
+        }
+
+        fieldRepository.deleteById(id);
+    }
+
+    @Override
+    public FieldDisplayDTO updateField(Long fieldId, FieldDTO fieldDTO) {
+        Field existingField = fieldRepository.findById(fieldId)
+                .orElseThrow(() -> new RuntimeException("Field not found with id: " + fieldId));
+
+        Farm farm = existingField.getFarm();
+
+        existingField.setFieldName(fieldDTO.getName());
+        existingField.setFieldArea(fieldDTO.getArea());
+        existingField.setFieldName(fieldDTO.getName());
+
+
+        Field updatedField = fieldRepository.save(existingField);
+
+        return FieldMapperDTO.INSTANCE.toDTO(updatedField);
+    }
+
+
+    private void validateFieldConstraints(FieldDTO fieldDTO, Farm farm) {
+
+        if (fieldDTO.getArea() > (farm.getFarmSurface() * 0.5)) {
+            throw new FieldConstraintViolationException("Field area cannot exceed 50% of the farm's total surface area.");
+        }
+
+        long fieldCount = fieldRepository.countByFarmId(farm.getId());
+        if (fieldCount >= 10) {
+            throw new FieldConstraintViolationException("A farm cannot have more than 10 fields.");
+        }
     }
 }

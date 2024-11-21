@@ -58,7 +58,6 @@ public class FarmController {
     }
 
 
-    @GetMapping("/search")
     @Operation(
             summary = "Search farms by name and address",
             description = "Search for farms by their name and address. If either parameter is empty, all farms will be returned.",
@@ -80,15 +79,14 @@ public class FarmController {
                     )
             }
     )
+    @GetMapping("/search")
     public ResponseEntity<List<FarmDTO>> findFarmByNameAndAddress(
-            @Parameter(description = "Name of the farm to search for", required = true)
-            @RequestParam String farmName,
-
-            @Parameter(description = "Address of the farm to search for", required = true)
-            @RequestParam @NotEmpty String farmAddress) {
-
-        List<FarmDTO> farmDTOs = farmService.findFarmByNameAndAddress(farmName, farmAddress);
-
+        @RequestParam(required = false) String farmName,
+        @RequestParam(required = false) String farmAddress,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "1") int size
+    ) {
+        List<FarmDTO> farmDTOs = farmService.findFarmByNameAndAddress(farmName, farmAddress, page, size);
         return ResponseEntity.ok(farmDTOs);
     }
 
