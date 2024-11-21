@@ -23,4 +23,6 @@ public interface FieldRepository extends JpaRepository<Field, Long>{
     @Query("SELECT SUM(f.fieldArea) FROM Field f WHERE f.farm.id = :farmId")
     Double sumFieldAreasByFarmId(@Param("farmId") Long farmId);
 
+    long countByFarmId(Long farmId);
+
 }

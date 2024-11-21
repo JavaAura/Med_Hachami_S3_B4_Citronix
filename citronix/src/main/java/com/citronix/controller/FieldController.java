@@ -2,7 +2,9 @@ package com.citronix.controller;
 
 import com.citronix.dto.req.FieldDTO;
 import com.citronix.dto.req.FarmDTO;
+import com.citronix.dto.res.ErrorResponse;
 import com.citronix.dto.res.FieldDisplayDTO;
+import com.citronix.exception.business.FieldConstraintViolationException;
 import com.citronix.mapper.FarmMapperDTO;
 import com.citronix.mapper.FieldMapperDTO;
 import com.citronix.model.Farm;
@@ -58,9 +60,75 @@ public class FieldController {
     }
 
 
+    @Operation(
+            summary = "Get fields by farm ID",
+            description = "Retrieve a list of fields associated with a specific farm ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of fields retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Farm not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/farm/{farmId}")
     public List<FieldDisplayDTO> getFieldsByFarmId(@PathVariable Long farmId) {
         return fieldService.findFieldsByFarmId(farmId);
+    }
+
+    @Operation(summary = "Get field details by ID", description = "Fetch field details  by field ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Field details fetched successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid Field ID"),
+            @ApiResponse(responseCode = "404", description = "Field not found")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<FieldDisplayDTO> getFieldById(@PathVariable Long id) {
+        FieldDisplayDTO fieldDto = fieldService.getFieldById(id);
+
+        return ResponseEntity.ok(fieldDto);
+    }
+
+    @Operation(
+            summary = "Get all fields",
+            description = "Retrieve a list of all fields available in the system."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of all fields retrieved successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping
+    public List<FieldDisplayDTO> getAllFields() {
+        return fieldService.findAllFields();
+    }
+
+
+    @Operation(summary = "Delete a field by ID", description = "Delete a field using its unique ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Field deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid field ID"),
+            @ApiResponse(responseCode = "404", description = "Field not found")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteFieldById(@PathVariable Long id) {
+        fieldService.deleteFieldById(id);
+
+        return ResponseEntity.ok("Field deleted successfully");
+    }
+
+    @PutMapping("/{fieldId}")
+    public ResponseEntity<?> updateField(
+            @PathVariable Long fieldId,
+            @RequestBody FieldDTO fieldDTO
+    ) {
+        try {
+            FieldDisplayDTO updatedField = fieldService.updateField(fieldId, fieldDTO);
+            return ResponseEntity.ok(updatedField);
+        } catch (FieldConstraintViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An unexpected error occurred");
+        }
     }
 
 
