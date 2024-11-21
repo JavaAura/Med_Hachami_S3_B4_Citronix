@@ -40,6 +40,7 @@ com/citronix/service/FieldService.class
 com/citronix/model/Tree.class
 com/citronix/exception/business/ResourceNotFoundException.class
 com/citronix/exception/business/DuplicateResourceException.class
+com/citronix/dto/embedded/EmbeddedFarmDTO.class
 com/citronix/mapper/FieldMapperDTO.class
 com/citronix/service/HarvestDetailService.class
 com/citronix/controller/HarvestController.class

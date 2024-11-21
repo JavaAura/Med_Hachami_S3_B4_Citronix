@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface IFieldService {
     FieldDisplayDTO saveField(FieldDTO fieldDTO);
+    public List<FieldDisplayDTO> findFieldsByFarmId(Long farmId) ;
 
 
 }

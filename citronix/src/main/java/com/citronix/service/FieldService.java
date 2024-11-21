@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.log4j.Log4j2;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Service interface for Field entity.
  * Defines methods for CRUD operations and additional business logic.
@@ -35,6 +38,16 @@ public class FieldService implements IFieldService {
     public FieldDisplayDTO saveField(FieldDTO fieldDTO) {
         Farm farm = farmRepository.findById(fieldDTO.getFarmId())
                 .orElseThrow(() -> new RuntimeException("Farm not found"));
+
+        Double totalFieldArea = fieldRepository.sumFieldAreasByFarmId(farm.getId());
+        totalFieldArea = totalFieldArea != null ? totalFieldArea + fieldDTO.getArea() : fieldDTO.getArea();
+
+        if (totalFieldArea >= farm.getFarmSurface()) {
+            throw new IllegalArgumentException(
+                    "The total area of fields cannot exceed the farm's surface area."
+            );
+        }
+
         Field field = new Field();
         field.setFieldName(fieldDTO.getName());
         field.setFieldArea(fieldDTO.getArea());
@@ -43,5 +56,12 @@ public class FieldService implements IFieldService {
         Field savedField = fieldRepository.save(field);
 
         return FieldMapperDTO.INSTANCE.toDTO(savedField);
+    }
+
+    public List<FieldDisplayDTO> findFieldsByFarmId(Long farmId) {
+        List<Field> fields = fieldRepository.findByFarmId(farmId);
+        return fields.stream()
+                .map(FieldMapperDTO.INSTANCE::toDTO)
+                .collect(Collectors.toList());
     }
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import com.citronix.model.Field;
 
+import java.util.List;
+
 /**
  * Repository interface for Field entity.
  * Provides CRUD operations and custom query methods through JpaRepository.
@@ -14,6 +16,11 @@ import com.citronix.model.Field;
 @Repository
 public interface FieldRepository extends JpaRepository<Field, Long>{
 
-    @Query("SELECT f FROM Field f JOIN FETCH f.farm WHERE f.id = :id")
-    Field findByIdWithFarm(@Param("id") Long id);
+
+    @Query("SELECT f FROM Field f JOIN FETCH f.farm WHERE f.farm.id = :farmId")
+    List<Field> findByFarmId(@Param("farmId") Long farmId);
+
+    @Query("SELECT SUM(f.fieldArea) FROM Field f WHERE f.farm.id = :farmId")
+    Double sumFieldAreasByFarmId(@Param("farmId") Long farmId);
+
 }

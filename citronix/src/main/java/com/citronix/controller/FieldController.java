@@ -19,10 +19,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * REST controller for managing Field entities.
@@ -56,6 +55,12 @@ public class FieldController {
     public ResponseEntity<FieldDisplayDTO> addField(@Valid @RequestBody FieldDTO fieldDTO) {
         FieldDisplayDTO savedField = fieldService.saveField(fieldDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedField);
+    }
+
+
+    @GetMapping("/farm/{farmId}")
+    public List<FieldDisplayDTO> getFieldsByFarmId(@PathVariable Long farmId) {
+        return fieldService.findFieldsByFarmId(farmId);
     }
 
 
