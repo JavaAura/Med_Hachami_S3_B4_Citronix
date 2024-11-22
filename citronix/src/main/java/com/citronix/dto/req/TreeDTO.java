@@ -1,14 +1,41 @@
-package com.citronix.dto;
+package com.citronix.dto.req;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+
 public class TreeDTO {
-    private long id;
-}
+
+     @NotNull(message = "Field ID cannot be null")
+    private Long fieldId;
+
+    @NotNull(message = "Planted date cannot be null")
+    @PastOrPresent(message = "Planted date must be in the past or today")
+    private LocalDate plantedAt;
+
+
+    public Long getFieldId() {
+        return fieldId;
+    }
+
+    public void setFieldId(Long fieldId) {
+        this.fieldId = fieldId;
+    }
+
+    public LocalDate getPlantedAt() {
+        return plantedAt;
+    }
+
+    public void setPlantedAt(LocalDate plantedAt) {
+        this.plantedAt = plantedAt;
+    }
+
+
+    public TreeDTO() {
+    }
+
+    public TreeDTO(Long fieldId, LocalDate plantedAt) {
+        this.fieldId = fieldId;
+        this.plantedAt = plantedAt;
+    }}

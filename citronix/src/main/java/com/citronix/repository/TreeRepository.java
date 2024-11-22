@@ -12,4 +12,4 @@ import com.citronix.model.Tree;
 @Repository
 public interface TreeRepository extends JpaRepository<Tree, Long>{
 
-}
+    long countByFieldId(Long fieldId);}
