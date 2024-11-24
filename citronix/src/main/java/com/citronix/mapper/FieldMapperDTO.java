@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = FarmMapperDTO.class)
+@Mapper(uses = {FarmMapperDTO.class, TreeMapperDTO.class})
 public interface FieldMapperDTO {
     FieldMapperDTO INSTANCE = Mappers.getMapper(FieldMapperDTO.class);
 
@@ -21,7 +21,7 @@ public interface FieldMapperDTO {
     @Mapping(source = "field.id", target = "id")
     @Mapping(source = "field.fieldName", target = "name")
     @Mapping(source = "field.fieldArea", target = "area")
-    @Mapping(source = "field.farm", target = "farm")
+    @Mapping(source = "field.farm", target = "farm") 
+    @Mapping(source = "field.trees", target = "fieldTrees") 
     FieldDisplayDTO toDTO(Field field);
 }
-

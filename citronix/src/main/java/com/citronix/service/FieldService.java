@@ -1,23 +1,23 @@
 package com.citronix.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.citronix.dto.req.FieldDTO;
 import com.citronix.dto.res.FieldDisplayDTO;
 import com.citronix.exception.business.FieldConstraintViolationException;
+import com.citronix.exception.business.ResourceNotFoundException;
 import com.citronix.mapper.FieldMapperDTO;
 import com.citronix.model.Farm;
 import com.citronix.model.Field;
 import com.citronix.repository.FarmRepository;
 import com.citronix.repository.FieldRepository;
 import com.citronix.service.interfaces.IFieldService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import lombok.extern.log4j.Log4j2;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service interface for Field entity.
@@ -38,7 +38,7 @@ public class FieldService implements IFieldService {
     @Override
     public FieldDisplayDTO saveField(FieldDTO fieldDTO) {
         Farm farm = farmRepository.findById(fieldDTO.getFarmId())
-                .orElseThrow(() -> new RuntimeException("Farm not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Farm not found"));
 
         validateFieldConstraints(fieldDTO, farm);
         Double totalFieldArea = fieldRepository.sumFieldAreasByFarmId(farm.getId());
@@ -78,7 +78,7 @@ public class FieldService implements IFieldService {
 
     @Override
     public List<FieldDisplayDTO> findAllFields() {
-        List<Field> fields = fieldRepository.findAll(); // Assuming JPA is used
+        List<Field> fields = fieldRepository.findAll(); 
         return fields.stream()
                 .map(f->FieldMapperDTO.INSTANCE.toDTO(f))
                 .collect(Collectors.toList());

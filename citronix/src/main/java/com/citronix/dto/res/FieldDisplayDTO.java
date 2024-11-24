@@ -1,13 +1,15 @@
 package com.citronix.dto.res;
 
+import java.util.List;
+
 import com.citronix.dto.req.FarmDTO;
 
 public class FieldDisplayDTO {
     private Long id;
     private String name;
     private Double area;
-    private FarmDTO farm;  // FarmDTO for showing farm details
-
+    private FarmDTO farm;  
+    private List<TreeResponseDTO> fieldTrees;
 
 
     public Long getId() {
@@ -41,4 +43,14 @@ public class FieldDisplayDTO {
     public void setFarm(FarmDTO farm) {
         this.farm = farm;
     }
+
+    public void setFieldTrees(List<TreeResponseDTO> fieldTrees) {
+        this.fieldTrees = fieldTrees;
+    }
+    
+    public List<TreeResponseDTO> getFieldTrees() {
+        return this.fieldTrees;
+    }
+    
+
 }
