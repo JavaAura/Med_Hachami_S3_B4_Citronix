@@ -8,6 +8,7 @@ public class TreeResponseDTO {
     private String level;
     private Long fieldId;
     private String fieldName;
+    private int age; 
 
     public TreeResponseDTO() {
     }
@@ -58,5 +59,13 @@ public class TreeResponseDTO {
 
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

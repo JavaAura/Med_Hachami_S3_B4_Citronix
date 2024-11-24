@@ -1,8 +1,15 @@
 package com.citronix.dao;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
+import com.citronix.dao.interfaces.IFarmDao;
 import com.citronix.dto.req.FarmDTO;
 import com.citronix.mapper.FarmMapperDTO;
 import com.citronix.model.Farm;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -10,17 +17,14 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
-public class FarmDao {
+public class FarmDao implements IFarmDao {
 
     @PersistenceContext
     private EntityManager em;
 
+    @Override
     public List<FarmDTO> findFarmByNameAndAddress(String farmName, String farmAddress, int page, int size) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Farm> cq = cb.createQuery(Farm.class);

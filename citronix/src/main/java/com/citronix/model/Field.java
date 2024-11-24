@@ -1,10 +1,16 @@
 package com.citronix.model;
 
-import jakarta.persistence.*;
-
+import java.util.List;
 
 import com.citronix.model.entity.BaseEntity;
-import java.util.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 /**
  * Represents a Field entity in the application.
@@ -20,9 +26,11 @@ public class Field extends BaseEntity {
     @JoinColumn(name = "farm_id")
     private Farm farm;
 
-  /*  @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
     private List<Tree> trees;
-*/
+
+    // @OneToMany(mappedBy = "field", cascade = CascadeType.ALL)
+    // private List<Harvest> harvests;
 
   public Long getId() {
       return super.getId();
@@ -55,4 +63,21 @@ public class Field extends BaseEntity {
     public void setFarm(Farm farm) {
         this.farm = farm;
     }
+
+    public List<Tree> getTrees() {
+    return trees;
+    }
+
+    public void setTrees(List<Tree> trees) {
+    this.trees = trees;
+    }
+
+    // public List<Harvest> getHarvests() {
+    // return harvests;
+    // }
+
+    // public void setHarvests(List<Harvest> harvests) {
+    // this.harvests = harvests;
+    // }
+
 }

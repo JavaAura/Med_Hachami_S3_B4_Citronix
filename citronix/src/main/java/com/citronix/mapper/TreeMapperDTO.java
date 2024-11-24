@@ -16,6 +16,7 @@ public interface TreeMapperDTO {
     @Mapping(source = "field.id", target = "fieldId")
     @Mapping(source = "field.fieldName", target = "fieldName") 
     @Mapping(source = "level", target = "level")
+    @Mapping(expression = "java(tree.calculateAge())", target = "age") 
     TreeResponseDTO toDTO(Tree tree);
 
 }
