@@ -1,14 +1,52 @@
-package com.citronix.dto;
+package com.citronix.dto.req;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+import java.util.List;
 
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class HarvestDTO {
     private long id;
+    private LocalDate harvestDate; 
+    private String season;
+    private Long fieldId; 
+    private List<HarvestDetailDTO> harvestDetails; 
+
+
+    public LocalDate getHarvestDate(){
+        return this.harvestDate;
+    }
+
+    public void setHarvestDate(LocalDate harvestDate){
+        this.harvestDate = harvestDate;
+    }
+
+    public String getSeason(){
+        return this.season;
+    }
+
+    public void setSeason(String season){
+        this.season = season;
+    }
+
+    public Long getFieldId(){
+        return this.fieldId;
+    }
+
+    public void setFieldId(Long fieldId){
+        this.fieldId = fieldId;
+    }
+
+    public List<HarvestDetailDTO> getHarvestDetails() {
+        return harvestDetails;
+    }
+
+    public void setHarvestDetails(List<HarvestDetailDTO> harvestDetails) {
+        this.harvestDetails = harvestDetails;
+    }
+
+
+
+
+
+
 }

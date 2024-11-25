@@ -70,7 +70,7 @@ public class FieldService implements IFieldService {
     @Override
     public FieldDisplayDTO getFieldById(Long fieldId) {
         Field field = fieldRepository.findById(fieldId)
-                .orElseThrow(() -> new IllegalArgumentException("Field not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Field not found"));
 
         return FieldMapperDTO.INSTANCE.toDTO(field);
 
@@ -87,7 +87,7 @@ public class FieldService implements IFieldService {
     @Override
     public void deleteFieldById(Long id) {
         if (!fieldRepository.existsById(id)) {
-            throw new IllegalArgumentException("Field not found");
+            throw new ResourceNotFoundException("Field not found");
         }
 
         fieldRepository.deleteById(id);
@@ -96,7 +96,7 @@ public class FieldService implements IFieldService {
     @Override
     public FieldDisplayDTO updateField(Long fieldId, FieldDTO fieldDTO) {
         Field existingField = fieldRepository.findById(fieldId)
-                .orElseThrow(() -> new RuntimeException("Field not found with id: " + fieldId));
+                .orElseThrow(() -> new ResourceNotFoundException("Field not found with id: " + fieldId));
 
         Farm farm = existingField.getFarm();
 

@@ -11,5 +11,5 @@ import com.citronix.model.Harvest;
  */
 @Repository
 public interface HarvestRepository extends JpaRepository<Harvest, Long>{
-
+    boolean existsByFieldIdAndSeason(Long fieldId, String season);
 }

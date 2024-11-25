@@ -1,5 +1,7 @@
 package com.citronix.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +18,5 @@ public interface TreeRepository extends JpaRepository<Tree, Long>{
 
     long countByFieldId(Long fieldId);
     Page<Tree> findAll(Pageable pageable);
+    List<Tree> findByFieldId(Long fieldId);
 }

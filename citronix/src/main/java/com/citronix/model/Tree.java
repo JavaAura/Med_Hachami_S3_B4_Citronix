@@ -24,6 +24,9 @@
         @Column(nullable = false)
         private LocalDate plantedAt;
 
+        @Transient
+        private Integer productivity; 
+
         @Enumerated(EnumType.STRING)
         @Column(nullable = false)
         private Level level;
@@ -69,4 +72,26 @@
         public void setField(Field field) {
             this.field = field;
         }
+
+        public int calculateProductivity() {
+            int age = LocalDate.now().getYear() - this.plantedAt.getYear();
+    
+            if (age < 3) {
+                this.productivity = 2;
+            } else if (age <= 10) {
+                this.productivity = 12;
+            } else if (age > 10) {
+                this.productivity = 20; 
+            }
+            return productivity;
+        }
+
+        public Integer getProductivity() {
+            return productivity;
+        }
+    
+        public void setProductivity(Integer productivity) {
+            this.productivity = productivity;
+        }
+    
     }

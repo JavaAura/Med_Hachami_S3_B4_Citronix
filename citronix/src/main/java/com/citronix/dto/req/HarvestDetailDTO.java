@@ -1,14 +1,30 @@
-package com.citronix.dto;
+package com.citronix.dto.req;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class HarvestDetailDTO {
-    private long id;
+    // private long id;
+    private Long treeId; 
+    private Integer quantity; 
+
+
+    public Long getTreeId() {
+        return treeId;
+    }
+
+    // Setter for treeId
+    public void setTreeId(Long treeId) {
+        this.treeId = treeId;
+    }
+
+    // Getter for quantity
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    // Setter for quantity
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+  
 }
